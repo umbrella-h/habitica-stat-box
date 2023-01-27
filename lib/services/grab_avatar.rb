@@ -1,7 +1,7 @@
 require 'grabzit'
-require_relative './crop_image.rb'
+require_relative '../use_cases/crop_image.rb'
 
-module UseCases
+module Services
   class GrabAvatar
     AVATAR_WIDTH = 140
     AVATAR_HEIGHT = 147
@@ -14,7 +14,7 @@ module UseCases
 
       # Sorry that I have to crop the watermark for layouts.
       # I'll design another section to give credit to GrabzIt in my final layout.
-      CropImage.new.perform(filepath: filepath, width: AVATAR_WIDTH, height: AVATAR_HEIGHT)
+      UseCases::CropImage.new.perform(filepath: filepath, width: AVATAR_WIDTH, height: AVATAR_HEIGHT)
     end
 
     private
