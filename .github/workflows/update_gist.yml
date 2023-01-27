@@ -1,0 +1,56 @@
+name: Update Gist
+on:
+  workflow_call:
+    secrets:
+      GH_PAT:
+         required: true
+      GIST_ID:
+         required: true
+      CLOUDINARY_API_KEY: 
+         required: true
+      CLOUDINARY_API_SECRET:
+         required: true
+      CLOUDINARY_CLOUD_NAME:
+         required: true
+      GRABZIT_APP_KEY:
+         required: true
+      GRABZIT_APP_SECRET:
+         required: true
+      HABITICA_USER_ID:
+         required: true
+
+jobs:
+  update_gist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+
+      - name: Check for cache
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          upload-chunk-size: 3000000
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Install dependencies
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Update Gist
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GIST_ID: ${{ secrets.GIST_ID }}
+          CLOUDINARY_API_KEY: ${{ secrets. CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          GRABZIT_APP_KEY: ${{ secrets.GRABZIT_APP_KEY }}
+          GRABZIT_APP_SECRET: ${{ secrets.GRABZIT_APP_SECRET }}
+          HABITICA_USER_ID: ${{ secrets.HABITICA_USER_ID }}
+        run: bundle exec rake stat_box

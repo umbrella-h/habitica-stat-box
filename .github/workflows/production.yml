@@ -1,0 +1,9 @@
+name: Production
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 15 4,19 * * *
+jobs:
+  update_gist:
+    uses: ./.github/workflows/update_gist.yml
+    secrets: inherit
