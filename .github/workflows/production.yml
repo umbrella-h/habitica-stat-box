@@ -2,7 +2,7 @@ name: Production
 on:
   workflow_dispatch:
   schedule:
-    - cron: '55 4,19 * * *'
+    - cron: '15 3,13 * * *'
 jobs:
   update_gist:
     uses: ./.github/workflows/update_gist.yml
