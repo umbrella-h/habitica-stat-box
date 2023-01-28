@@ -54,3 +54,6 @@ jobs:
           GRABZIT_APP_SECRET: ${{ secrets.GRABZIT_APP_SECRET }}
           HABITICA_USER_ID: ${{ secrets.HABITICA_USER_ID }}
         run: bundle exec rake stat_box
+      
+      - name: Purge avatar url on github profile README
+        run: curl -X PURGE https://camo.githubusercontent.com/b510afc5177a44976802470124b359992fe53a3302c4967519d641f75e78ce78/68747470733a2f2f7265732e636c6f7564696e6172792e636f6d2f646936653069756e6d2f696d6167652f75706c6f61642f76312f68616269746963612d737461742d626f782f6d795f6176617461722e6a70673f
