@@ -1,0 +1,64 @@
+name: Update Avatar Gist
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 3,13 * * *'
+  workflow_call:
+    secrets:
+      GH_PAT:
+         required: true
+      AVATAR_GIST_ID:
+         required: true
+      GRABZIT_APP_KEY:
+         required: true
+      GRABZIT_APP_SECRET:
+         required: true
+      HABITICA_USER_ID:
+         required: true
+
+jobs:
+  update_avatar_gist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+
+      - name: Check for cache
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          upload-chunk-size: 3000000
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Install dependencies
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Grab avatar image
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GRABZIT_APP_KEY: ${{ secrets.GRABZIT_APP_KEY }}
+          GRABZIT_APP_SECRET: ${{ secrets.GRABZIT_APP_SECRET }}
+          HABITICA_USER_ID: ${{ secrets.HABITICA_USER_ID }}
+        run: bundle exec rake stat_box_avatar
+
+      - name: Update Avatar Gist
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          AVATAR_GIST_ID: ${{ secrets.AVATAR_GIST_ID }}
+        run: |
+          cd ..
+          git config --global user.email "umbrella.hsiao@gmail.com"
+          git config --global user.name "KasaHNO3"
+          git clone "https://${{ env.GH_PAT }}@gist.github.com//${{ env.AVATAR_GIST_ID }}.git"
+          cd ${{ env.AVATAR_GIST_ID }}
+          cp ../habitica-stat-box/avatar.jpg .
+          git add avatar.jpg
+          git commit --allow-empty -m 'job: Update avatar image in gist'
+          git push origin main
