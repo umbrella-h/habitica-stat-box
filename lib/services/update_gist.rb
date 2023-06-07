@@ -31,9 +31,9 @@ module Services
           end
         end
       rescue Timeout::Error
-        puts 'Timeout (> 60 sec)'
+        raise 'Timeout (> 60 sec)'
       rescue StandardError => e
-        puts e
+        raise e
       end
     end
   end
