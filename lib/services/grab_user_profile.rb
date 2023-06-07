@@ -19,9 +19,9 @@ module Services
         result = JSON.parse(res.body)
         map_user_profile(result: result)
       rescue Timeout::Error
-        puts 'Timeout (> 60 sec)'
+        raise 'Timeout (> 60 sec)'
       rescue StandardError => e
-        puts e
+        raise e
       end
     end
 
