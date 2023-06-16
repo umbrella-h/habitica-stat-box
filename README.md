@@ -44,3 +44,19 @@ If you are interested in the game mechanics, please check their fandom page, for
 
 1. The `Update Avatar Gist` action is unstable now. Please check [umbrella-h/habitica-stat-box/issues #14](https://github.com/umbrella-h/habitica-stat-box/issues/14). Before the bug is fixed, it is recommanded to disable it. if you still want to update the image in you gist, please trigger it manually, and check the result to see if a retry is needed.
 1. GitHub will suspend the scheduled trigger for GitHub action workflows if there is no commit in the repository for the past 60 days. I am trying to use [gautamkrishnar/keepalive-workflow](https://github.com/gautamkrishnar/keepalive-workflow). Please check [umbrella-h/habitica-stat-box/issues #18](https://github.com/umbrella-h/habitica-stat-box/issues/18).
+
+## Development
+
+Edit `.env` file, and run the command below for testing in development environment .
+
+```
+$ bundle exec rake dev_stats
+```
+
+```
+$ bundle exec rake dev_avatar
+```
+
+Sequence Diagram
+
+![sequence_diagram](uml/svg/sequence_diagram.svg)

@@ -1,0 +1,25 @@
+@startuml sequence_diagram
+title habitica-stat-box Sequence Diagram
+
+participant "Github Actions" as action
+participant "Rakefile" as task
+participant "Services::GrabUserProfile" as habitica_service
+participant "Habitica API" as habitica_api
+participant "ViewModels::StatExport" as view_model
+participant "Services::UpdateGist" as gist_service
+participant "Gist API" as gist_api
+
+action -> task : $ bundle exec rake stat_box
+task -> habitica_service : new.perform
+habitica_service -> habitica_api : GET request
+habitica_api -> habitica_service : response
+habitica_service -> task : <Hash>user_profile
+task -> view_model : new.build(user_profile:)
+view_model -> task : <String>content
+task -> task : <String>filename, <String>description
+task -> gist_service : new.perform(gist_id: ENV['STATS_GIST_ID'], filename:, content:, description:)
+gist_service -> gist_api : PATCH request
+gist_api -> gist_service : response
+gist_service -> task : true
+
+@enduml
