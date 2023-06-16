@@ -47,7 +47,7 @@ If you are interested in the game mechanics, please check their fandom page, for
 
 ## Development
 
-Edit `.env` file, and run the command below for testing in development environment .
+Edit `.env` file, and run the command bellow for testing in development environment .
 
 ```
 $ bundle exec rake dev_stats
